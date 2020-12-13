@@ -29,6 +29,8 @@ public class PlayerMove : MonoBehaviour
     // 0 --> 静止
     // 1 --> 大致往左
     // 2 --> 大致往右
+    [HideInInspector]
+    public bool pullFlag = false;
 
     List<Vector3> boxPosition;
     Quaternion playerRotation;
@@ -44,10 +46,6 @@ public class PlayerMove : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        //foreach (GameObject i in boxs)
-        //{
-        //    boxPosition.Add(i.transform.position);
-        //}
         capsule = GetComponent<CapsuleCollider>();
     }
 
@@ -60,12 +58,12 @@ public class PlayerMove : MonoBehaviour
           vertical = Input.GetAxis("Vertical");
 
         Vector3 a = transform.position;
-        Quaternion b = transform.rotation;
-        a.x += horizontal * 0.1f * moveLimit * squat;
-        a.z += vertical * 0.1f * moveLimit * squat;
-        transform.SetPositionAndRotation(a, b);
-
-
+        if (!pullFlag)
+        {
+            a.x += horizontal * 0.1f * moveLimit * squat;
+            a.z += vertical * 0.1f * moveLimit * squat;
+            transform.position = a;
+        }
         PlayerManager.instance.isAir = isAir = !Physics.Raycast(jumpTransform.position, -transform.up, 0.1f);
         if (Input.GetButtonDown("Jump") && !isAir)
         {
@@ -119,11 +117,13 @@ public class PlayerMove : MonoBehaviour
             {
                 playerRotation.eulerAngles = new Vector3(0f, 0f, 0f);
                 moveLimit = 1f;
+                walk = 2;
             }
             else if (vertical < -0.5f)
             {
                 playerRotation.eulerAngles = new Vector3(0f, 180f, 0f);
                 moveLimit = 1f;
+                walk = 1;
             }
             
         }

@@ -7,10 +7,10 @@ public class PushCar : MonoBehaviour
     public GameObject car;
     public GameObject player;
     bool playerIn;
-    bool stuck = false;
+    [HideInInspector]
+    public bool stuck = false;
     float j_key;
 
-    Vector3 turn;
     void Start()
     {
         
@@ -26,7 +26,6 @@ public class PushCar : MonoBehaviour
             if (j_key > 0.5f && playerIn && walk == 2)
             {
                 car.transform.position += transform.forward * 0.01f;
-                //player.transform.position += turn * 0.01f;
             }
             else if (j_key > 0.5f && playerIn && walk == 1)
             {
@@ -42,8 +41,7 @@ public class PushCar : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            turn = car.transform.position - player.transform.position;
-            turn.Normalize();
+
             playerIn = true;
         }
         else if(other.tag == "Wall")
@@ -57,9 +55,9 @@ public class PushCar : MonoBehaviour
         {
             playerIn = false;
         }
-        //else if (other.tag == "Wall")
-        //{
-        //    stuck = true;
-        //}
+        else if(other.tag == "Wall")
+        {
+            stuck = false;
+        }
     }
 }
