@@ -67,7 +67,7 @@ public class PlayerMove : MonoBehaviour
         PlayerManager.instance.isAir = isAir = !Physics.Raycast(jumpTransform.position, -transform.up, 0.1f);
         if (Input.GetButtonDown("Jump") && !isAir)
         {
-            myForce.AddForce(new Vector3(0, 3 * 35, 0), ForceMode.Impulse);
+            myForce.AddForce(new Vector3(0, 3 * myForce.mass, 0), ForceMode.Impulse);
         }
         
 
